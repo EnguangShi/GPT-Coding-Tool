@@ -1,0 +1,23 @@
+{
+  "name": "gpt-coding-tool",
+  "version": "1.0.0",
+  "description": "A gpt coding tool",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EnguangShi/GPT-Coding-Tool.git"
+  },
+  "author": "Enguang Shi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EnguangShi/GPT-Coding-Tool/issues"
+  },
+  "homepage": "https://github.com/EnguangShi/GPT-Coding-Tool#readme",
+  "dependencies": {
+    "electron": "^24.1.3"
+  }
+}

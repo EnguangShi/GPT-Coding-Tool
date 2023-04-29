@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ChatGPT API Client</title>
+    <style>
+      body {
+        display: flex;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      #sidebar {
+        background-color: #f0f0f0;
+        width: 250px;
+        height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      #main {
+        flex-grow: 1;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="sidebar">
+      <form id="api-form">
+        <label for="api-key">API Key:</label>
+        <input
+          type="text"
+          id="api-key"
+          value="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"
+        />
+      </form>
+    </div>
+    <div id="main">
+      <h1>ChatGPT API Client</h1>
+      <pre id="response"></pre>
+      <form id="message-form">
+        <label for="message">Message:</label>
+        <input type="text" id="message" />
+        <br />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <script>
+      const form = document.getElementById("message-form");
+      const apiKeyInput = document.getElementById("api-key");
+      const messageInput = document.getElementById("message");
+      const responseContainer = document.getElementById("response");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const apiKey = apiKeyInput.value.trim();
+        const message = messageInput.value.trim();
+
+        if (!apiKey || !message) return;
+
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [
+              {
+                role: "user",
+                content: message,
+              },
+            ],
+            max_tokens: 4000,
+          }),
+        };
+
+        try {
+          const response = await fetch(
+            "https://api.openai.com/v1/chat/completions",
+            requestOptions
+          );
+
+          const jsonResponse = await response.json();
+
+          if (!response.ok) {
+            throw new Error(jsonResponse.error.message);
+          }
+
+          console.log("API Response:", jsonResponse);
+          responseContainer.textContent =
+            (jsonResponse.choices &&
+              jsonResponse.choices[0] &&
+              jsonResponse.choices[0].message.content) ||
+            "No response";
+        } catch (error) {
+          console.error("Error:", error);
+          if (error instanceof TypeError) {
+            responseContainer.textContent = "Error occurred";
+          } else {
+            responseContainer.textContent = `Error: ${error.message}`;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
